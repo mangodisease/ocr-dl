@@ -1,0 +1,11 @@
+numpy
+flask
+tensorflow
+opencv-python 
+matplotlib
+tesseract-ocr
+pytesseract==0.3.9
+easyocr
+pymongo
+flask_cors
+pillow
