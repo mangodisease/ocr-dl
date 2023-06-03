@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS
 from PIL import Image
-import tensorflow as tf
 import os
 import easyocr
 import pytesseract

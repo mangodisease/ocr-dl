@@ -1,6 +1,6 @@
 numpy
 flask
-tensorflow
+#tensorflow
 opencv-python 
 matplotlib
 easyocr
