@@ -22,14 +22,7 @@ def ping():
 def ocr():
     image = request.files['file'].read()
     uploaded = np.fromstring(image, np.uint8)
-    #dilate image
-    img = cv2.imdecode(uploaded, cv2.IMREAD_UNCHANGED)
-    kernel = np.ones((7, 7), np.uint8)
-    dilated_img = cv2.dilate(img, kernel, iterations=1)
-
-    reuploaded = np.fromstring(image, np.uint8)
-    # Read the file content as an image using OpenCV
-    id = cv2.imdecode(np.frombuffer(reuploaded, np.uint8), 1)
+    id = cv2.imdecode(np.frombuffer(uploaded, np.uint8), 1)
 
     # Convert the image to RGB format
     Extrat = cv2.cvtColor(id, cv2.COLOR_BGR2RGB)
@@ -77,4 +70,4 @@ def ocr():
     return json.dumps(obj)
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(host="0.0.0.0", port="8080", debug=True)
