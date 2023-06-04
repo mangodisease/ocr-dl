@@ -9,6 +9,7 @@ from io import BytesIO
 import json
 import pp
 
+
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -16,6 +17,17 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 def ping():
     return "Hello, I am alive", 200
 
+@app.route("/process", methods=["POST"])
+def process():
+    if 'file' not in request.files:
+        return 'No file provided', 400
+    file = request.files['file']
+    if file.filename == '':
+        return 'Invalid file', 400
+    upload_dir = 'images'  # Replace with the desired upload directory
+    file.save(os.path.join(upload_dir, file.filename))
+    upload_url = f"https://csu-dl-api.onrender.com/uploads/{file.filename}"  # Replace with the appropriate URL
+    return upload_url, 200
 
 @app.route("/ocr", methods=['POST'])
 def ocr():
