@@ -8,7 +8,16 @@ import cv2
 from io import BytesIO
 import json
 import pp
+import boto3
 
+session = boto3.session.Session()
+e_url ="https://csucc.sgp1.digitaloceanspaces.com"
+client = session.client('s3',
+                        #config=botocore.config.Config(s3={'addressing_style': 'virtual'}), # Configures to use subdomain/virtual calling format.
+                        region_name='sgp1',
+                        endpoint_url=e_url,
+                        aws_access_key_id="DO00VPT27JE4BC4JV9Z6",
+                        aws_secret_access_key="Ym1/UTBzW+05lKIuL6LuYaVZ1H8D1h/Of7W8nOZF1jA")
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -24,10 +33,9 @@ def process():
     file = request.files['file']
     if file.filename == '':
         return 'Invalid file', 400
-    upload_dir = 'images'  # Replace with the desired upload directory
-    file.save(os.path.join(upload_dir, file.filename))
-    upload_url = f"https://csu-dl-api.onrender.com/images/{file.filename}"  # Replace with the appropriate URL
-    return upload_url, 200
+    client.put_object(Body=file.read(), ACL='public-read', Bucket='csucc', Key='dl.png')
+    url = e_url+"/csucc/dl.png"
+    return url, 200
 
 @app.route("/ocr", methods=['POST'])
 def ocr():
@@ -76,7 +84,7 @@ def ocr():
                 obj["License No"] = str(results[i + 1][1]).upper()
             elif "EXPIRY DATE" in val:
                 obj["Expiry Date"] = str(results[i +1][1]).upper()
-            
+        pp(results) 
         return json.dumps(obj), 200
     except:
         return "notOK", 400
