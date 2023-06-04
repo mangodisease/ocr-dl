@@ -1,4 +1,5 @@
 gunicorn
+boto3
 pp-ez
 numpy
 flask
