@@ -10,3 +10,4 @@ easyocr
 pymongo
 flask_cors
 pillow
+certifi

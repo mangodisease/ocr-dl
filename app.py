@@ -10,10 +10,15 @@ import json
 import pp
 import boto3
 
+import pymongo
+import certifi
+ca = certifi.where()
+client = pymongo.MongoClient("mongodb+srv://sjit:pass@cluster0.suax5r5.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=ca)
+db = client["csucc-logs"]
+
 session = boto3.session.Session()
 e_url ="https://csucc.sgp1.digitaloceanspaces.com"
 client = session.client('s3',
-                        #config=botocore.config.Config(s3={'addressing_style': 'virtual'}), # Configures to use subdomain/virtual calling format.
                         region_name='sgp1',
                         endpoint_url=e_url,
                         aws_access_key_id="DO00VPT27JE4BC4JV9Z6",
@@ -25,6 +30,18 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route("/ping", methods=['GET'])
 def ping():
     return "Hello, I am alive", 200
+
+@app.route("/submit-logs", methods={"POST"})
+def logs():
+    try:
+        data = request.get_json()
+        pp(data)
+        col = db["logs"]
+        x = col.insert_one(data)
+        print(x)
+        return "ok", 200
+    except:
+        return "notOk", 400
 
 @app.route("/process", methods=["POST"])
 def process():
