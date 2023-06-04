@@ -66,9 +66,8 @@ def ocr():
                 obj["Expiry Date"] = str(results[i +1][1]).upper()
             
         return json.dumps(obj), 200
-    except e:
-        print(e)
-        return 400
-        
+    except:
+        return "notOK", 400
+
 if __name__ == "__main__":
 	app.run(host="0.0.0.0", port="8080", debug=True)
