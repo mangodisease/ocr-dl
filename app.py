@@ -26,7 +26,7 @@ def process():
         return 'Invalid file', 400
     upload_dir = 'images'  # Replace with the desired upload directory
     file.save(os.path.join(upload_dir, file.filename))
-    upload_url = f"https://csu-dl-api.onrender.com/uploads/{file.filename}"  # Replace with the appropriate URL
+    upload_url = f"https://csu-dl-api.onrender.com/images/{file.filename}"  # Replace with the appropriate URL
     return upload_url, 200
 
 @app.route("/ocr", methods=['POST'])
