@@ -12,6 +12,7 @@ import boto3
 
 import pymongo
 import certifi
+
 ca = certifi.where()
 client = pymongo.MongoClient("mongodb+srv://sjit:pass@cluster0.suax5r5.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=ca)
 db = client["csucc-logs"]
@@ -42,6 +43,18 @@ def logs():
         return "ok", 200
     except:
         return "notOk", 400
+
+@app.route("/get-logs", methods=["POST"])
+def get_logs():
+    val = request.get_json()
+    pp(val)
+    cursor = db["logs"].find(val["query"]).sort("createdAt", pymongo.ASCENDING)
+    lst = []
+    for document in cursor:
+        del document["_id"]
+        lst.append(document)
+
+    return json.dumps({ "result": lst }), 200
 
 @app.route("/process", methods=["POST"])
 def process():
