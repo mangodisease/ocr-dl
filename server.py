@@ -25,7 +25,7 @@ def ocr():
     id = cv2.imdecode(np.frombuffer(uploaded, np.uint8), 1)
 
     # Convert the image to RGB format
-    Extrat = cv2.cvtColor(id, cv2.COLOR_BGR2RGB)
+    Extrat = cv2.cvtColor(id, cv2.COLOR_BGR2RGB)#.COLOR_BGR2GRAY
     reader = easyocr.Reader(['en'])#, gpu = True
     results = reader.readtext(Extrat, detail=1, paragraph=False)
     obj = {}
