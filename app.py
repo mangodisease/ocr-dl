@@ -32,7 +32,20 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 def ping():
     return "Hello, I am alive", 200
 
-@app.route("/submit-logs", methods={"POST"})
+@app.route("/login", methods=["POST"])
+def login():
+    try:
+        query = request.get_json()
+        user = db["users"].find_one(query)
+        pp(user)
+        if user:
+            return "ok", 200
+        else:
+            return "notOk", 400
+    except:
+        return "notOk", 400
+
+@app.route("/submit-logs", methods=["POST"])
 def logs():
     try:
         data = request.get_json()
